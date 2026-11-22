@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureHack AI - Security Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Dashboard styles */
+        .dashboard-container {
+            padding: 20px;
+            background: #f3f4f6;
+            min-height: 100vh;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card.alert {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .stat-card.warning {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .stat-card.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111827;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .alerts-list {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .alert-item {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+        
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .alert-icon.critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .alert-icon.high {
+            background: #fff7ed;
+            color: #f97316;
+        }
+        
+        .alert-icon.medium {
+            background: #fef9c3;
+            color: #eab308;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-title {
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .alert-time {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+        
+        .session-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .session-table th {
+            text-align: left;
+            padding: 12px;
+            background: #f9fafb;
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .session-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .risk-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .risk-badge.high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .risk-badge.medium {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+        
+        .risk-badge.low {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin: 0 4px;
+        }
+        
+        .action-btn.terminate {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .action-btn.verify {
+            background: #10b981;
+            color: white;
+        }
+        
+        .action-btn.investigate {
+            background: #f59e0b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>🔐 Security Monitoring Dashboard</h1>
+        
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="activeSessions">0</div>
+                <div class="stat-label">Active Sessions</div>
+            </div>
+            <div class="stat-card alert">
+                <div class="stat-value" id="anomalies">0</div>
+                <div class="stat-label">Anomalies Detected</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-value" id="riskScore">0</div>
+                <div class="stat-label">Avg Risk Score</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-value" id="verified">0</div>
+                <div class="stat-label">Verified Sessions</div>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="chart-container">
+            <canvas id="activityChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="riskChart"></canvas>
+        </div>
+        
+        <!-- Active Sessions -->
+        <div class="chart-container">
+            <h3>Active Sessions</h3>
+            <table class="session-table" id="sessionTable">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>IP Address</th>
+                        <th>Device</th>
+                        <th>Duration</th>
+                        <th>Risk Score</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionBody">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Recent Alerts -->
+        <div class="alerts-list">
+            <h3>Recent Security Alerts</h3>
+            <div id="alertsContainer">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        class SecurityDashboard {
+            constructor() {
+                this.ws = null;
+                this.charts = {};
+                this.initWebSocket();
+                this.initCharts();
+            }
+            
+            initWebSocket() {
+                const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+                this.ws = new WebSocket(`${wsProtocol}//${location.host}/ws/dashboard`);
+                
+                this.ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    this.updateDashboard(data);
+                };
+            }
+            
+            initCharts() {
+                // Activity Chart
+                const ctx1 = document.getElementById('activityChart').getContext('2d');
+                this.charts.activity = new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Active Sessions',
+                            data: [],
+                            borderColor: '#667eea',
+                            tension: 0.4
+                        }, {
+                            label: 'Anomalies',
+                            data: [],
+                            borderColor: '#ef4444',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+                
+                // Risk Chart
+                const ctx2 = document.getElementById('riskChart').getContext('2d');
+                this.charts.risk = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Low Risk', 'Medium Risk', 'High Risk', 'Critical'],
+                        datasets: [{
+                            data: [0, 0, 0, 0],
+                            backgroundColor: ['#10b981', '#f59e0b', '#f97316', '#ef4444']
+                        }]
+                    }
+                });
+            }
+            
+            updateDashboard(data) {
+                // Update stats
+                document.getElementById('activeSessions').textContent = data.stats.active_sessions;
+                document.getElementById('anomalies').textContent = data.stats.anomalies;
+                document.getElementById('riskScore').textContent = data.stats.avg_risk.toFixed(1);
+                document.getElementById('verified').textContent = data.stats.verified_sessions;
+                
+                // Update session table
+                this.updateSessionTable(data.sessions);
+                
+                // Update alerts
+                this.updateAlerts(data.alerts);
+                
+                // Update charts
+                this.updateCharts(data);
+            }
+            
+            updateSessionTable(sessions) {
+                const tbody = document.getElementById('sessionBody');
+                tbody.innerHTML = '';
+                
+                sessions.forEach(session => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${session.user}</td>
+                        <td>${session.ip}</td>
+                        <td>${session.device}</td>
+                        <td>${session.duration}</td>
+                        <td><span class="risk-badge ${session.risk_class}">${session.risk_score}</span></td>
+                        <td>
+                            <button class="action-btn verify" onclick="dashboard.verifySession('${session.id}')">Verify</button>
+                            <button class="action-btn terminate" onclick="dashboard.terminateSession('${session.id}')">Terminate</button>
+                            <button class="action-btn investigate" onclick="dashboard.investigate('${session.id}')">Investigate</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            
+            updateAlerts(alerts) {
+                const container = document.getElementById('alertsContainer');
+                container.innerHTML = '';
+                
+                alerts.forEach(alert => {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert-item';
+                    alertDiv.innerHTML = `
+                        <div class="alert-icon ${alert.severity}">${alert.icon}</div>
+                        <div class="alert-content">
+                            <div class="alert-title">${alert.title}</div>
+                            <div>${alert.message}</div>
+                            <div class="alert-time">${alert.time}</div>
+                        </div>
+                    `;
+                    container.appendChild(alertDiv);
+                });
+            }
+            
+            updateCharts(data) {
+                // Update activity chart
+                this.charts.activity.data.labels.push(new Date().toLocaleTimeString());
+                this.charts.activity.data.datasets[0].data.push(data.stats.active_sessions);
+                this.charts.activity.data.datasets[1].data.push(data.stats.anomalies);
+                
+                if (this.charts.activity.data.labels.length > 20) {
+                    this.charts.activity.data.labels.shift();
+                    this.charts.activity.data.datasets[0].data.shift();
+                    this.charts.activity.data.datasets[1].data.shift();
+                }
+                
+                this.charts.activity.update();
+                
+                // Update risk chart
+                this.charts.risk.data.datasets[0].data = [
+                    data.stats.low_risk,
+                    data.stats.medium_risk,
+                    data.stats.high_risk,
+                    data.stats.critical
+                ];
+                this.charts.risk.update();
+            }
+            
+            verifySession(sessionId) {
+                fetch(`/api/sessions/${sessionId}/verify`, { method: 'POST' })
+                    .then(() => console.log('Session verified'));
+            }
+            
+            terminateSession(sessionId) {
+                fetch(`/api/sessions/${sessionId}/terminate`, { method: 'POST' })
+                    .then(() => console.log('Session terminated'));
+            }
+            
+            investigate(sessionId) {
+                window.open(`/investigate/${sessionId}`, '_blank');
+            }
+        }
+        
+        const dashboard = new SecurityDashboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureHack AI - Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .main-container {
+            display: flex;
+            height: calc(100vh - 70px);
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .editor-section {
+            flex: 2;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-tab {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .file-tab span {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            border: none;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+        }
+
+        .sidebar {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .scan-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scan-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .scan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .results-section {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .vulnerability-card {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+
+        .vulnerability-card.high {
+            background: #fff7ed;
+            border-left-color: #f97316;
+        }
+
+        .vulnerability-card.medium {
+            background: #fef9c3;
+            border-left-color: #eab308;
+        }
+
+        .vulnerability-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .vulnerability-desc {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        .cursor-position {
+            padding: 0.5rem 1rem;
+            background: #f3f4f6;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .chat-section {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .chat-message {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: #f3f4f6;
+            border-radius: 8px;
+        }
+
+        .chat-message .user {
+            font-weight: 600;
+            color: #4f46e5;
+            font-size: 0.85rem;
+        }
+
+        .chat-message .text {
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .chat-message .time {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            float: right;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .chat-input button {
+            padding: 0.5rem 1rem;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .security-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .security-alert.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="security-alert" id="securityAlert">
+        <strong>🚨 Security Alert!</strong>
+        <p id="alertMessage">Suspicious activity detected</p>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">SecureHack AI</div>
+        <div class="user-info">
+            <a href="/dashboard" style="color:#667eea;text-decoration:none;font-weight:600;">Security Dashboard</a>
+            <div class="avatar" id="userAvatar">JD</div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="editor-section">
+            <div class="editor-header">
+                <div class="file-tab">
+                    <span>📄 main.py</span>
+                </div>
+                <div class="editor-actions">
+                    <button class="btn btn-primary" onclick="saveCode()">Save</button>
+                    <button class="btn" onclick="shareCode()">Share</button>
+                </div>
+            </div>
+            <textarea id="codeEditor" placeholder="# Write your Python code here...">
+# Welcome to SecureHack AI
+def hello():
+    print("Hello, World!")
+
+# Try writing vulnerable code:
+password = "hardcoded123"  # This will be detected
+eval(user_input)  # Dangerous!
+import os
+os.system("ls")  # Command injection risk
+            </textarea>
+            <div class="cursor-position" id="cursorPosition">Ln 1, Col 1</div>
+        </div>
+
+        <div class="sidebar">
+            <div class="scan-section">
+                <div class="section-title">
+                    <span>🔍</span>
+                    <span>AI Vulnerability Scanner</span>
+                </div>
+                <button class="scan-button" onclick="scanVulnerabilities()" id="scanButton">
+                    Scan Code for Vulnerabilities
+                </button>
+            </div>
+
+            <div class="results-section" id="results">
+                <div class="section-title">
+                    <span>📊</span>
+                    <span>Scan Results</span>
+                </div>
+                <div id="scanResults">
+                    <div style="text-align: center; color: #9ca3af;">
+                        Click scan to analyze code
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-section">
+                <div class="section-title">
+                    <span>💬</span>
+                    <span>Team Chat</span>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message">
+                        <span class="user">System:</span>
+                        <span class="text">Welcome to the session!</span>
+                        <span class="time">now</span>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type a message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const editor = document.getElementById('codeEditor');
+        let currentUser = {
+            name: 'John Doe',
+            initials: 'JD'
+        };
+
+        // Track cursor position
+        editor.addEventListener('click', updateCursorPosition);
+        editor.addEventListener('keyup', updateCursorPosition);
+
+        function updateCursorPosition() {
+            const pos = editor.selectionStart;
+            const lines = editor.value.substr(0, pos).split('\n');
+            const lineNumber = lines.length;
+            const colNumber = lines[lines.length - 1].length + 1;
+            document.getElementById('cursorPosition').textContent = `Ln ${lineNumber}, Col ${colNumber}`;
+        }
+
+        // Vulnerability scanning
+        async function scanVulnerabilities() {
+            const button = document.getElementById('scanButton');
+            const originalText = button.textContent;
+            
+            button.textContent = 'Scanning...';
+            button.disabled = true;
+
+            const code = editor.value;
+
+            try {
+                const response = await fetch('/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code: code })
+                });
+
+                const data = await response.json();
+                displayResults(data);
+                
+                if (data.severity === 'high' || data.severity === 'critical') {
+                    triggerAlert('Critical vulnerabilities detected!');
+                }
+            } catch (error) {
+                console.error('Scan failed:', error);
+                // Demo mode - show mock results
+                displayMockResults();
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('scanResults');
+            
+            if (data.vulnerabilities && data.vulnerabilities.length > 0) {
+                let html = '';
+                data.vulnerabilities.forEach(v => {
+                    html += `
+                        <div class="vulnerability-card ${v.severity}">
+                            <div class="vulnerability-title">${v.title}</div>
+                            <div class="vulnerability-desc">${v.description}</div>
+                            <div style="font-size:0.8rem; color:#6b7280; margin-top:0.5rem;">
+                                Line ${v.line}
+                            </div>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+            } else {
+                resultsDiv.innerHTML = `
+                    <div style="background:#d1fae5; padding:1rem; border-radius:8px; color:#065f46;">
+                        ✅ No vulnerabilities found!
+                    </div>
+                `;
+            }
+        }
+
+        function displayMockResults() {
+            const resultsDiv = document.getElementById('scanResults');
+            resultsDiv.innerHTML = `
+                <div class="vulnerability-card">
+                    <div class="vulnerability-title">Hardcoded Password</div>
+                    <div class="vulnerability-desc">Hardcoded password detected in line 5</div>
+                </div>
+                <div class="vulnerability-card high">
+                    <div class="vulnerability-title">Use of eval()</div>
+                    <div class="vulnerability-desc">Arbitrary code execution risk</div>
+                </div>
+                <div class="vulnerability-card medium">
+                    <div class="vulnerability-title">Subprocess Usage</div>
+                    <div class="vulnerability-desc">Potential command injection</div>
+                </div>
+            `;
+        }
+
+        function triggerAlert(message) {
+            const alert = document.getElementById('securityAlert');
+            document.getElementById('alertMessage').textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        function saveCode() {
+            alert('Code saved! (Demo)');
+        }
+
+        function shareCode() {
+            alert('Share link copied! (Demo)');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const messages = document.getElementById('chatMessages');
+                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                messages.innerHTML += `
+                    <div class="chat-message">
+                        <span class="user">You:</span>
+                        <span class="text">${message}</span>
+                        <span class="time">${time}</span>
+                    </div>
+                `;
+                
+                input.value = '';
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        // Load user info
+        window.addEventListener('load', () => {
+            const savedUser = sessionStorage.getItem('currentUser');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                currentUser = user;
+                document.getElementById('userAvatar').textContent = user.initials;
+            }
+        });
+    </script>
+</body>
+</html>

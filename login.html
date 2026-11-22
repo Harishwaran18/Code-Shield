@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureHack AI - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 50%;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 450px;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .security-badge {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .badge-item {
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .badge-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 1.5rem;
+            color: #4f46e5;
+        }
+
+        .badge-item span {
+            font-size: 0.8rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge-item:nth-child(1) { animation-delay: 0.1s; }
+        .badge-item:nth-child(2) { animation-delay: 0.2s; }
+        .badge-item:nth-child(3) { animation-delay: 0.3s; }
+        .badge-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .login-form {
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1.1rem;
+        }
+
+        .input-icon input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .input-icon input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-icon input::placeholder {
+            color: #9ca3af;
+            font-size: 0.95rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9ca3af;
+            font-size: 1.2rem;
+        }
+
+        .password-toggle:hover {
+            color: #4f46e5;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4b5563;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .forgot-password {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .forgot-password:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .login-btn.loading .btn-text {
+            visibility: hidden;
+        }
+
+        .login-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .social-login {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .social-login p {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b5563;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: white;
+        }
+
+        .social-icon:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .signup-link {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .signup-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .demo-credentials {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        .demo-credentials p {
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .demo-credentials .cred-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #4b5563;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-credentials .cred-item i {
+            color: #10b981;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #dc2626;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #10b981;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        .fingerprint-scan {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #667eea;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+        }
+    </style>
+</head>
+<body>
+    <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <div class="container">
+        <div class="fingerprint-scan">
+            <i>🛡️</i>
+        </div>
+
+        <div class="logo">
+            <h1>SecureHack AI</h1>
+            <p>AI-Powered Secure Collaborative Coding Platform</p>
+        </div>
+
+        <div class="security-badge">
+            <div class="badge-item">
+                <div class="badge-icon">🔒</div>
+                <span>End-to-End Encrypted</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon">🤖</div>
+                <span>AI Vulnerability Scanner</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon">👥</div>
+                <span>Real-time Collaboration</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon">📊</div>
+                <span>ML Anomaly Detection</span>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <i>⚠️</i>
+            <span id="errorText">Invalid username or password</span>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <i>✅</i>
+            <span>Login successful! Redirecting to editor...</span>
+        </div>
+
+        <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <div class="input-icon">
+                    <i>👤</i>
+                    <input type="text" id="username" placeholder="Enter your username" value="hackathon_user" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-icon">
+                    <i>🔐</i>
+                    <input type="password" id="password" placeholder="Enter your password" value="demo123">
+                    <span class="password-toggle" onclick="togglePassword()" id="passwordToggle">👁️</span>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" checked> Remember me
+                </label>
+                <a href="#" class="forgot-password" onclick="showForgotPassword(event)">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="btn-text">Login to Secure Dashboard</span>
+            </button>
+        </form>
+
+        <div class="social-login">
+            <p>Or continue with</p>
+            <div class="social-icons">
+                <div class="social-icon" onclick="socialLogin('github')">
+                    <i>🐙</i>
+                </div>
+                <div class="social-icon" onclick="socialLogin('google')">
+                    <i>G</i>
+                </div>
+                <div class="social-icon" onclick="socialLogin('microsoft')">
+                    <i>Ⓜ️</i>
+                </div>
+                <div class="social-icon" onclick="socialLogin('slack')">
+                    <i>💬</i>
+                </div>
+            </div>
+        </div>
+
+        <div class="signup-link">
+            Don't have an account? <a href="#" onclick="showSignup(event)">Create free account</a>
+        </div>
+
+        <div class="demo-credentials">
+            <p>🎯 Demo Credentials (for hackathon):</p>
+            <div class="cred-item">
+                <i>👤</i> Username: <strong>hackathon_user</strong> (or any username)
+            </div>
+            <div class="cred-item">
+                <i>🔐</i> Password: <strong>demo123</strong> (any password works)
+            </div>
+            <div class="cred-item" style="color: #667eea; margin-top: 8px;">
+                <i>⚡</i> Click login to access real-time collaborative editor
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo mode - any login works for hackathon
+        const DEMO_MODE = true;
+        
+        // Store user session
+        let currentUser = null;
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggle = document.getElementById('passwordToggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggle.textContent = '🔒';
+            } else {
+                passwordInput.type = 'password';
+                toggle.textContent = '👁️';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.classList.add('show');
+            
+            // Hide success message if showing
+            document.getElementById('successMessage').classList.remove('show');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 3000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.querySelector('span').textContent = message;
+            successDiv.classList.add('show');
+            
+            // Hide error if showing
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // Validate inputs
+            if (!username) {
+                showError('Please enter your username');
+                return;
+            }
+
+            if (!password && !DEMO_MODE) {
+                showError('Please enter your password');
+                return;
+            }
+
+            // Show loading state
+            loginBtn.classList.add('loading');
+            
+            try {
+                if (DEMO_MODE) {
+                    // Demo mode - simulate login with any credentials
+                    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+                    
+                    // Create user session
+                    currentUser = {
+                        username: username,
+                        name: username.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                        email: username.includes('@') ? username : `${username}@example.com`,
+                        initials: username.substring(0, 2).toUpperCase(),
+                        loginTime: new Date().toISOString(),
+                        sessionId: 'sess_' + Math.random().toString(36).substr(2, 9)
+                    };
+                    
+                    // Store in session storage for editor access
+                    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    showSuccess('Login successful! Redirecting...');
+                    
+                    // Redirect to editor
+                    setTimeout(() => {
+                        window.location.href = '/editor';
+                    }, 1000);
+                } else {
+                    // Real API call
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        currentUser = data.user;
+                        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        
+                        showSuccess('Login successful! Redirecting...');
+                        
+                        setTimeout(() => {
+                            window.location.href = '/editor';
+                        }, 1000);
+                    } else {
+                        showError(data.message || 'Invalid credentials');
+                    }
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Connection error. Please try again.');
+            } finally {
+                loginBtn.classList.remove('loading');
+            }
+        }
+
+        function socialLogin(provider) {
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.classList.add('loading');
+            
+            showSuccess(`Authenticating with ${provider}...`);
+            
+            // Simulate OAuth flow
+            setTimeout(() => {
+                // Create demo user with provider info
+                currentUser = {
+                    username: `${provider}_user`,
+                    name: `${provider.charAt(0).toUpperCase() + provider.slice(1)} User`,
+                    email: `user@${provider}.com`,
+                    initials: provider.substring(0, 2).toUpperCase(),
+                    provider: provider,
+                    loginTime: new Date().toISOString(),
+                    sessionId: 'sess_' + Math.random().toString(36).substr(2, 9)
+                };
+                
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                showSuccess(`Logged in with ${provider}! Redirecting...`);
+                
+                setTimeout(() => {
+                    window.location.href = '/editor';
+                }, 1000);
+            }, 1500);
+        }
+
+        function showForgotPassword(event) {
+            event.preventDefault();
+            showSuccess('Password reset link sent to your email! (Demo)');
+        }
+
+        function showSignup(event) {
+            event.preventDefault();
+            showSuccess('Redirecting to signup page... (Demo)');
+            
+            // Simulate redirect
+            setTimeout(() => {
+                alert('🎯 Hackathon Demo: In production, this would take you to the signup page.\n\nFor now, just use any username/password to login!');
+            }, 1500);
+        }
+
+        // Add keyboard shortcut for demo (Ctrl/Cmd + D to fill demo credentials)
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                e.preventDefault();
+                document.getElementById('username').value = 'hackathon_user';
+                document.getElementById('password').value = 'demo123';
+                showSuccess('✨ Demo credentials filled! Click login to continue.');
+            }
+        });
+
+        // Auto-fill demo credentials on page load (optional)
+        window.addEventListener('load', () => {
+            // Check if returning from editor
+            const lastUser = sessionStorage.getItem('currentUser');
+            if (lastUser) {
+                const user = JSON.parse(lastUser);
+                document.getElementById('username').value = user.username;
+                // Don't show message, just keep logged in
+            }
+        });
+
+        // Add input validation
+        document.getElementById('username').addEventListener('input', function() {
+            if (this.value.length > 0) {
+                this.style.borderColor = '#10b981';
+            } else {
+                this.style.borderColor = '#e5e7eb';
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            if (this.value.length >= 6) {
+                this.style.borderColor = '#10b981';
+            } else if (this.value.length > 0) {
+                this.style.borderColor = '#f59e0b';
+            } else {
+                this.style.borderColor = '#e5e7eb';
+            }
+        });
+
+        // Add enter key handler
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleLogin(e);
+            }
+        });
+
+        // Prevent form from actually submitting
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
