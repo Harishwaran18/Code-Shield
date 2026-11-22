@@ -1,0 +1,27 @@
+[project]
+name = "code-shield"
+version = "2.0.0"
+description = "Secure collaborative code sharing with vulnerability scanning and ML session monitoring"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+exclude = ["legacy", "web", "data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+ignore = ["E501", "B008", "S104"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S105", "S106", "S311"]
+"server/security/secrets.py" = ["S105"]
+"server/security/passwords.py" = ["S105"]
+
+[tool.bandit]
+exclude_dirs = ["tests", "legacy", "web", "data"]

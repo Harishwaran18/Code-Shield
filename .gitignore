@@ -6,15 +6,30 @@ __pycache__/
 .venv/
 venv/
 env/
+build/
+dist/
+.coverage
+htmlcov/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
 
 # Application runtime data
+data/
 temp/
 static/uploads/
 secret.txt
 audit.log
 models/
 *.pkl
+*.joblib
+*.db
+*.sqlite3
 .env
+.env.*
+!.env.example
 
 # Editors / OS
 .vscode/

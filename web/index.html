@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Code-Shield: secure collaborative code sharing with vulnerability scanning and ML session monitoring.">
+  <title>Code-Shield</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#view">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="/" data-link>
+      <span class="brand-mark" aria-hidden="true">CS</span>
+      <span class="brand-text">Code-Shield</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main"></nav>
+  </header>
+  <main id="view" class="view" tabindex="-1"></main>
+  <footer class="footer">
+    <span>Code-Shield <span id="version" class="muted"></span></span>
+    <span class="muted">Encrypted sessions · Bandit scanning · Isolation Forest monitoring</span>
+  </footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>

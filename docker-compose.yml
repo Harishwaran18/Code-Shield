@@ -1,0 +1,21 @@
+services:
+  codeshield:
+    build: .
+    image: code-shield:2.0.0
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - codeshield-data:/srv/codeshield/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  codeshield-data:
