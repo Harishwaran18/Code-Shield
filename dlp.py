@@ -26,7 +26,7 @@ SECRET_PATTERNS = [
     ("JSON Web Token", re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}"),
      "high", "Hardcoded JSON Web Token detected."),
     ("Hardcoded Credential", re.compile(
-        r"""(?i)\b(?:password|passwd|pwd|secret|api[_-]?key|token)\s*=\s*['"][^'"\s]{4,}['"]"""),
+        r"""(?i)\b[a-z0-9_]*(?:password|passwd|pwd|secret|api[_-]?key|token)\s*=\s*['"][^'"\s]{4,}['"]"""),
      "high", "Hardcoded credential. Read it from an environment variable instead."),
     ("Database URI", re.compile(r"(?:mongodb(?:\+srv)?|postgres(?:ql)?|mysql)://[^\s'\"]+:[^\s'\"]+@"),
      "critical", "Connection string with embedded credentials detected."),
